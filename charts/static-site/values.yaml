@@ -1,0 +1,70 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Default ingress values - will be overridden by environment-specific values
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  # Host will be set from environment values
+  hosts: []
+  tls: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+currentEnvironment: dev
+environments:
+  dev:
+    environment:
+      SECRET: dev secret
+    ingress:
+      hosts:
+        - host: dev.test
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: static-site-tls-dev
+          hosts:
+            - dev.test
+  prod:
+    environment:
+      SECRET: prod secret
+    ingress:
+      hosts:
+        - host: prod.test
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: static-site-tls-prod
+          hosts:
+            - prod.test
+
+# Add TLS settings to store certificate from setup script
+tls:
+  certificate: ""
+  privateKey: ""
+
+html:
+  configMapName: static-site-html

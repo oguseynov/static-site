@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.html.configMapName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "static-site.labels" . | nindent 4 }}
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Static Site Example</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 40px;
+          line-height: 1.6;
+        }
+        h1 {
+          color: #333;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Hello World!</h1>
+      <p>I am on <strong>{{ .Values.currentEnvironment }}</strong>.
+      And this is my <strong>{{ index .Values.environments .Values.currentEnvironment "environment" "SECRET" }}</strong>.</p>
+    </body>
+    </html>
