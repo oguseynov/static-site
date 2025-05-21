@@ -65,6 +65,7 @@ environments:
 tls:
   certificate: ""
   privateKey: ""
+  autoGenerate: true
 
 html:
   configMapName: static-site-html

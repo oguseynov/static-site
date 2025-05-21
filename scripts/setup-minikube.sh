@@ -31,7 +31,8 @@ kubectl wait --for=condition=Established crd/ingressroutes.traefik.io --timeout=
 helm upgrade --install static-site ./charts/static-site -f charts/static-site/values.yaml \
   --set "tls.certificate=$(cat /tmp/tls.crt)" \
   --set "tls.privateKey=$(cat /tmp/tls.key)" \
-  --set "currentEnvironment=dev" \
+  --set "tls.autoGenerate=false" \
+  --set "currentEnvironment=dev"
 
 LOCAL_IP="127.0.0.1"
 
